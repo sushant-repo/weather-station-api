@@ -1,10 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { WeatherStationController } from './weather-stations/weather-stations-controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { WeatherStation } from './weather-stations/weather-station-entity';
+import { WeatherStationService } from './weather-stations/weather-stations-service';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: "sqlite",
+      database: "proa-weather",
+      entities: [WeatherStation],
+      synchronize: true
+    }),
+    TypeOrmModule.forFeature([WeatherStation])
+  ],
+  controllers: [WeatherStationController],
+  providers: [WeatherStationService],
 })
 export class AppModule {}
