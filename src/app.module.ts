@@ -7,6 +7,7 @@ import { Variable } from './variables/variable-entity';
 import { VariablesService } from './variables/variables-service';
 import { Measurement } from './measurements/measurement-entity';
 import { MeasurementsService } from './measurements/measurements-service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,7 +17,10 @@ import { MeasurementsService } from './measurements/measurements-service';
       entities: [WeatherStation, Variable, Measurement],
       synchronize: true
     }),
-    TypeOrmModule.forFeature([WeatherStation, Variable, Measurement])
+    TypeOrmModule.forFeature([WeatherStation, Variable, Measurement]),
+    ConfigModule.forRoot({
+      isGlobal: true
+    })
   ],
   controllers: [WeatherStationController],
   providers: [WeatherStationService, VariablesService, MeasurementsService],
