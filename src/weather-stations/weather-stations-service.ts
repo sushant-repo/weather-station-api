@@ -5,6 +5,7 @@ import { WeatherStation } from "./weather-station-entity";
 import * as path from "path";
 import * as fs from "fs";
 import * as csv from "csv-parser";
+import { getSeedFilePath } from "src/util/text";
 
 interface WeatherStationRaw {
     id: string,
@@ -27,13 +28,15 @@ export class WeatherStationService {
         return this.repo.find();
     }
 
+    async getStationById(id: number) {
+        return (await this.repo.find({
+            where: {id},
+            relations: ['variables']
+        }))!
+    }
+
     async onModuleInit(): Promise<void>{
-        const filePath = path.resolve(
-            process.cwd(),
-            "src",
-            "seeds",
-            "weather_stations.csv"
-        );
+        const filePath = getSeedFilePath("weather_stations.csv");
 
         const stations: WeatherStation[] = [];
 

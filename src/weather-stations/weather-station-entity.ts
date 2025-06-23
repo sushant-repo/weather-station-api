@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Variable } from "src/variables/variable-entity";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class WeatherStation {
@@ -22,4 +23,7 @@ export class WeatherStation {
 
     @Column("float")
     latitude: number;
+
+    @OneToMany(() => Variable, (variable) => variable.weatherStation)
+    variables: Variable[];
 }
