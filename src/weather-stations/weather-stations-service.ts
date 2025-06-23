@@ -2,10 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WeatherStation } from "./weather-station-entity";
-import * as path from "path";
+import { getSeedFilePath } from "src/util/text";
 import * as fs from "fs";
 import * as csv from "csv-parser";
-import { getSeedFilePath } from "src/util/text";
+import { MeasurementResponseDto } from "src/measurements/measurement-response-dto";
+import { WeatherStationResponseDto } from "./weather-station-response-dto";
 
 interface WeatherStationRaw {
     id: string,
@@ -29,12 +30,49 @@ export class WeatherStationService {
     }
 
     async getStationById(id: number) {
-        return (await this.repo.find({
+        var station = await this.repo.findOne({
             where: {id},
             relations: ['variables', 'variables.measurements']
-        }))!
+        });
+
+        if(station == null){
+            throw new Error(`Station with id: ${id} was not found.`);
+        }
+
+        return this.transformToStationResponseDto(station)
     }
 
+    private  transformToStationResponseDto(station: WeatherStation): WeatherStationResponseDto {
+        const measurements: MeasurementResponseDto[] = station.variables
+            .flatMap((v) =>
+            v.measurements.map((m) => ({
+                id: m.id,
+                station_id: m.station_id,
+                var_id: m.var_id,
+                value: m.value,
+                timestamp: m.timestamp,
+                variableName: v.long_name,
+                unit: v.unit,
+            }))
+            )
+            .sort(
+            (a, b) =>
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() // latest first
+            );
+
+        return {
+            id: station.id,
+            ws_name: station.ws_name,
+            site: station.site,
+            portfolio: station.portfolio,
+            state: station.state,
+            latitude: station.latitude,
+            longitude: station.longitude,
+            measurements,
+        };
+    }
+
+    
     async onModuleInit(): Promise<void>{
         const filePath = getSeedFilePath("weather_stations.csv");
 
