@@ -31,7 +31,7 @@ export class WeatherStationService {
     async getStationById(id: number) {
         return (await this.repo.find({
             where: {id},
-            relations: ['variables']
+            relations: ['variables', 'variables.measurements']
         }))!
     }
 

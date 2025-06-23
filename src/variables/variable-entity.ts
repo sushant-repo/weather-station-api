@@ -1,5 +1,6 @@
+import { Measurement } from "src/measurements/measurement-entity";
 import { WeatherStation } from "src/weather-stations/weather-station-entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Variable {
@@ -23,4 +24,7 @@ export class Variable {
     })
     @JoinColumn({ name: "station_id"})
     weatherStation: WeatherStation
+
+    @OneToMany(() => Measurement, (measurement) => measurement.variable)
+    measurements: Measurement[];
 }

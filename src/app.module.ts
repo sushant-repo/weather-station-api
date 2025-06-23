@@ -5,18 +5,20 @@ import { WeatherStation } from './weather-stations/weather-station-entity';
 import { WeatherStationService } from './weather-stations/weather-stations-service';
 import { Variable } from './variables/variable-entity';
 import { VariablesService } from './variables/variables-service';
+import { Measurement } from './measurements/measurement-entity';
+import { MeasurementsService } from './measurements/measurements-service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: "sqlite",
       database: "proa-weather",
-      entities: [WeatherStation, Variable],
+      entities: [WeatherStation, Variable, Measurement],
       synchronize: true
     }),
-    TypeOrmModule.forFeature([WeatherStation, Variable])
+    TypeOrmModule.forFeature([WeatherStation, Variable, Measurement])
   ],
   controllers: [WeatherStationController],
-  providers: [WeatherStationService, VariablesService],
+  providers: [WeatherStationService, VariablesService, MeasurementsService],
 })
 export class AppModule {}
