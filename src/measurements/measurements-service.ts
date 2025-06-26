@@ -35,14 +35,13 @@ export class MeasurementsService {
 
         const count = await this.repo.count();
         if (count !== 0) {
-            console.log("Measurements alreayd exists. Skipping seeding.");
+            console.log("Measurements already exists. Skipping seeding.");
             return;
         }
 
         let totalSeeded = 0;
 
         for (const file of measurementFiles.sort()) {
-            console.log(measurementFiles, file);
             const station_id = parseInt(file.match(/\d+/)?.[0] || "", 10);
             const filePath = path.join(seedDir, file);
 
