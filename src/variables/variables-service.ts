@@ -52,7 +52,7 @@ export class VariablesService {
 
         if(count === 0){
             const parsedVariables = await csvParser();
-            this.repo.save(parsedVariables);
+            await this.repo.save(parsedVariables);
 
             console.log(`Seeded ${parsedVariables.length} Variables.`);
         }else{
