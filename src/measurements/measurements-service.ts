@@ -22,7 +22,7 @@ export class MeasurementsService {
         private readonly variableRepo: Repository<Variable>
     ) {}
 
-    async onModuleInit(): Promise<void> {
+    async seed(): Promise<void> {
         const seedDir = getSeedDirectory();
         const files = fs.readdirSync(seedDir);
         const measurementFiles = files.filter((file) =>

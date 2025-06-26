@@ -23,7 +23,7 @@ export class VariablesService {
         private repo: Repository<Variable>
     ){}
 
-    async onModuleInit(): Promise<void>{
+    async seed(): Promise<void>{
         const filePath = getSeedFilePath("variables.csv");
 
         const variables : Variable[] = [];

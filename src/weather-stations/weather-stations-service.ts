@@ -73,7 +73,7 @@ export class WeatherStationService {
     }
 
     
-    async onModuleInit(): Promise<void>{
+    async seed(): Promise<void>{
         const filePath = getSeedFilePath("weather_stations.csv");
 
         const stations: WeatherStation[] = [];
